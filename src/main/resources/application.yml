@@ -1,0 +1,55 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /vaccine-drive
+
+spring:
+  application:
+    name: school-vaccination-portal
+  datasource:
+    url: jdbc:mysql://localhost:3306/vaccination
+    username: root
+    password: Satmoh@1999
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  profiles:
+    active: local
+
+jakarta.persistence.jdbc.url: jdbc:mysql://localhost:3306/vaccination
+
+
+
+logging:
+  level:
+    org.springframework: INFO
+    com.yourpackage: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+
+# Swagger configuration (if you're using springdoc-openapi)
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+
+
+
+
