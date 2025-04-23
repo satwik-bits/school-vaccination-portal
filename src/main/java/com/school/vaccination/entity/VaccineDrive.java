@@ -1,5 +1,6 @@
 package com.school.vaccination.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.school.vaccination.converter.IntegerListToStringConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,7 @@ public class VaccineDrive {
     private String location;
 
     @OneToMany(mappedBy = "drive", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<StudentVaccination> studentVaccinations;
 
 }

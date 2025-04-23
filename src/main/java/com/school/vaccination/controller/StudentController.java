@@ -44,7 +44,7 @@ public class StudentController {
     ) {
         try {
             Page<Student> students = studentService.fetchStudentDetails(pageNo, pageSize);
-            return new ResponseEntity<>(students, HttpStatus.OK);
+            return new ResponseEntity<>(students.getContent(), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }
