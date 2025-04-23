@@ -2,12 +2,20 @@ package com.school.vaccination.validations;
 
 import com.school.vaccination.request.LoginRequest;
 import io.micrometer.common.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
+import java.util.Date;
+import java.util.Locale;
 
 @Component
 public class ValidateLoginRequest {
@@ -32,11 +40,12 @@ public class ValidateLoginRequest {
             throw new Exception("DOB is in incorrect format");
         }
         else {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                    .withResolverStyle(ResolverStyle.STRICT);
-            LocalDate dob = LocalDate.parse(loginRequest.getDob(), formatter);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+            Date date = sdf.parse(loginRequest.getDob());
+            Instant instant = date.toInstant();
+            LocalDate dobDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate today = LocalDate.now();
-            if(dob.isAfter(today)){
+            if(dobDate.isAfter(today)){
                 throw new Exception("Please enter valid DOB");
             }
         }
@@ -52,13 +61,12 @@ public class ValidateLoginRequest {
 
     }
 
-    private static boolean isValidDateFormat(String dobStr) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                .withResolverStyle(ResolverStyle.STRICT);
+    public static boolean isValidDateFormat(String dobStr) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
         try {
-            LocalDate.parse(dobStr, formatter);
+            Date date = sdf.parse(dobStr);
             return true;
-        } catch (DateTimeParseException e) {
+        } catch (Exception e) {
             return false;
         }
     }

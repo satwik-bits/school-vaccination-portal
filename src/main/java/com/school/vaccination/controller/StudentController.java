@@ -6,7 +6,10 @@ import com.school.vaccination.request.StudentRequest;
 import com.school.vaccination.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,12 +28,11 @@ public class StudentController {
     @PostMapping("/add")
     public ResponseEntity<Object> addStudent(
             @Validated
-            @RequestBody StudentRequest studentRequest){
+            @RequestBody StudentRequest studentRequest) {
         try {
             studentService.addStudent(studentRequest);
             return ResponseEntity.ok().body("Successfully added student");
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
@@ -39,12 +41,11 @@ public class StudentController {
     public ResponseEntity<Object> getStudentDetails(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize
-    ){
-        try{
+    ) {
+        try {
             Page<Student> students = studentService.fetchStudentDetails(pageNo, pageSize);
             return new ResponseEntity<>(students, HttpStatus.OK);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
@@ -54,12 +55,11 @@ public class StudentController {
             @PathVariable String identifier,
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize
-    ){
-        try{
+    ) {
+        try {
             Page<Student> students = studentService.fetchStudentDetailsByIdentifier(identifier, pageNo, pageSize);
             return new ResponseEntity<>(students, HttpStatus.OK);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
@@ -69,12 +69,11 @@ public class StudentController {
             @PathVariable String name,
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize
-    ){
-        try{
+    ) {
+        try {
             Page<Student> students = studentService.fetchStudentDetailsByName(name, pageNo, pageSize);
             return new ResponseEntity<>(students, HttpStatus.OK);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
@@ -84,12 +83,11 @@ public class StudentController {
             @PathVariable int classId,
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize
-    ){
-        try{
+    ) {
+        try {
             Page<Student> students = studentService.fetchStudentDetailsByClassId(classId, pageNo, pageSize);
             return new ResponseEntity<>(students, HttpStatus.OK);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
@@ -99,12 +97,11 @@ public class StudentController {
             @PathVariable boolean isVaccinated,
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize
-    ){
-        try{
+    ) {
+        try {
             Page<Student> students = studentService.fetchStudentDetailsWhichAreVaccinated(isVaccinated, pageNo, pageSize);
             return new ResponseEntity<>(students, HttpStatus.OK);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
@@ -112,12 +109,11 @@ public class StudentController {
     @DeleteMapping("/delete/{identifier}")
     public ResponseEntity<Object> deleteStudentDetails(
             @PathVariable String identifier
-    ){
-        try{
+    ) {
+        try {
             studentService.deleteStudent(identifier);
             return ResponseEntity.ok().body("Successfully deleted Student");
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
@@ -125,28 +121,24 @@ public class StudentController {
     @PutMapping("/update/{identifier}")
     public ResponseEntity<Object> updateStudentRecord(
             @Validated
-            @RequestBody StudentRequest studentRequest, @PathVariable String identifier){
-        try{
+            @RequestBody StudentRequest studentRequest, @PathVariable String identifier) {
+        try {
             Student updatedStudent = studentService.updateStudentInfo(studentRequest);
             return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
 
-    @PostMapping("/uploadCsv")
+    @PostMapping(value = "/uploadCsv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> bulkUpload(
             @RequestParam("file") MultipartFile file
-            ){
-        try{
+    ) {
+        try {
             Map<String, Object> response = studentService.bulkUploadStudentCsv(file);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
-
-
 }

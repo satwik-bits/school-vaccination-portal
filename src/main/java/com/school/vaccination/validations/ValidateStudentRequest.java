@@ -31,6 +31,9 @@ public class ValidateStudentRequest {
         if(StringUtils.isBlank(studentRequest.getIdentifier())){
             throw new Exception("Identifier cannot be null/blank");
         }
+        if(studentRequest.isVaccinated()){
+            throw new Exception("Student should not be initially vaccinated!!");
+        }
         return true;
     }
 }

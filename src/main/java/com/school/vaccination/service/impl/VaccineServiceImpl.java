@@ -34,8 +34,8 @@ public class VaccineServiceImpl implements VaccineService {
                     LocalDateTime scheduledDate = vaccineDrive.getScheduledDate();
                     LocalDateTime expectedDate = LocalDateTime.now().plusDays(15);
 
-                    if (!scheduledDate.toLocalDate().isEqual(expectedDate.toLocalDate())) {
-                        throw new IllegalArgumentException("Scheduled date must be exactly 15 days from today.");
+                    if (scheduledDate.isBefore(expectedDate)) {
+                        throw new IllegalArgumentException("Scheduled date must be at least 15 days from today.");
                     }
 
                     vaccineDriveRepository.save(vaccineDrive);

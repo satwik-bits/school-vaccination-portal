@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "student")
+@Table(name = "student_table")
 @Data
 @Builder
-@AllArgsConstructor // <- provided by Lombok
+@AllArgsConstructor
 @NoArgsConstructor
 public class Student {
 
@@ -20,16 +20,22 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "studentIdentifier")
     private String studentIdentifier;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "age")
     private int age;
 
+    @Column(name = "classId")
     private int classId;
 
+    @Column(name = "mobileNo")
     private String mobileNo;
 
+    @Column(name = "isVaccinated")
     private boolean isVaccinated;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)

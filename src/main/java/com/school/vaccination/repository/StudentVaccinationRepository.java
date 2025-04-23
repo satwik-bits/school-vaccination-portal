@@ -10,13 +10,13 @@ import org.springframework.stereotype.Repository;
 public interface StudentVaccinationRepository extends JpaRepository<StudentVaccination, String> {
 
     @Query(value = """
-    SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END
+    SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
     FROM student_vaccinations sv
-    JOIN vaccine_drives vd ON sv.drive_id = vd.id
-    JOIN student s ON sv.student_id = s.id
-    WHERE s.identifier = :studentIdentifier AND vd.vaccine_name = :vaccineName
+    JOIN vaccine_drives_table vd ON sv.drive_id = vd.id
+    JOIN student_table s ON sv.student_id = s.id
+    WHERE s.studentIdentifier = :studentIdentifier AND vd.name = :vaccineName
     """, nativeQuery = true)
-    boolean existsByStudentIdAndVaccineName(@Param("studentIdentifier") String studentIdentifier,
+    Long existsByStudentIdAndVaccineName(@Param("studentIdentifier") String studentIdentifier,
                                             @Param("vaccineName") String vaccineName);
 
 }

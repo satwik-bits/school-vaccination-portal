@@ -1,5 +1,6 @@
 package com.school.vaccination.response;
 
+import com.school.vaccination.entity.VaccineDrive;
 import com.school.vaccination.request.VaccinationDriveRequest;
 import lombok.Data;
 
@@ -14,6 +15,6 @@ public class DashboardOverView {
 
     private double vaccinatedPercentage;
 
-    private List<VaccinationDriveRequest> vaccinationDriveRequestList;
+    private List<VaccineDrive> vaccinationDriveList;
 
 }

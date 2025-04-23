@@ -23,7 +23,7 @@ public class VaccineDriveController {
             @RequestBody VaccinationDriveRequest vaccinationDriveRequest){
         try {
             vaccineService.addVaccineDriveDetails(vaccinationDriveRequest);
-            return ResponseEntity.ok().body("Successfully added student");
+            return ResponseEntity.ok().body("Successfully added Vaccine Details");
         }
         catch(Exception e){
             return ResponseEntity.badRequest().body(e);
@@ -50,7 +50,7 @@ public class VaccineDriveController {
     ){
         try{
             vaccineService.deleteVaccineDriveDetails(identifier);
-            return ResponseEntity.ok().body("Successfully deleted Student");
+            return ResponseEntity.ok().body("Successfully deleted Vaccine Details");
         }
         catch(Exception e){
             return ResponseEntity.badRequest().body(e);

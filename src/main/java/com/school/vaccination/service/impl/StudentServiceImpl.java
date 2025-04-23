@@ -125,10 +125,6 @@ public class StudentServiceImpl implements StudentService {
             while((line = reader.readLine())!=null){
                 lineNumber++;
 
-                if(lineNumber==1) {
-                    continue;
-                }
-
                 String[] columns = line.split(",");
 
                 if (columns.length != 6) {

@@ -1,5 +1,6 @@
 package com.school.vaccination.entity;
 
+import com.school.vaccination.converter.IntegerListToStringConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "vaccine_drives")
+@Table(name = "vaccine_drives_table")
 @Data
 @Builder
 @NoArgsConstructor
@@ -27,6 +28,7 @@ public class VaccineDrive {
 
     private int availableDozes;
 
+    @Convert(converter = IntegerListToStringConverter.class)
     private List<Integer> applicableClasses;
 
     private String title;
