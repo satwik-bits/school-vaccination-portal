@@ -68,26 +68,33 @@ public class VaccineServiceImpl implements VaccineService {
     }
 
     @Override
-    public VaccineDrive updateVaccinationDriveInfo(VaccinationDriveRequest updatedVaccinationDriveRequest) throws Exception {
-
-        if(ValidateVaccineDriveRequest.validateVaccineDriveRequest(updatedVaccinationDriveRequest)) {
-
-            VaccineDrive vaccineDriveAlreadyExists = vaccineDriveRepository.findByDriveIdentifier(updatedVaccinationDriveRequest.getIdentifier());
-            if (vaccineDriveAlreadyExists != null) {
-                throw new Exception("Update cannot be possible as student with Identifier is not found!!");
-            } else {
-                if (!updatedVaccinationDriveRequest.getIdentifier().equals(vaccineDriveAlreadyExists.getDriveIdentifier())) {
-                    throw new Exception("Identifier cannot be updated!!");
-                }
-                if(updatedVaccinationDriveRequest.getScheduledDate().isBefore(LocalDateTime.now())){
-                    throw new Exception("Update cannot be possible here as the schedule has passed!!");
-                }
-
-                VaccineDrive updatedVaccineDrive = VaccineDriveRequestToVaccine.toEntity(updatedVaccinationDriveRequest);
-                vaccineDriveRepository.save(updatedVaccineDrive);
-                return updatedVaccineDrive;
-            }
+    public VaccineDrive updateVaccinationDriveInfo(VaccinationDriveRequest req) throws Exception {
+        if (!ValidateVaccineDriveRequest.validateVaccineDriveRequest(req)) {
+            throw new Exception("Invalid vaccination drive payload!!");
         }
-        return null;
+
+        VaccineDrive existing =
+                vaccineDriveRepository.findByDriveIdentifier(req.getIdentifier());
+        if (existing == null) {
+            throw new Exception("Update cannot be possible, Identifier not found!!");
+        }
+
+        if (!req.getIdentifier().equals(existing.getDriveIdentifier())) {
+            throw new Exception("Identifier cannot be updated!!");
+        }
+
+        if (req.getScheduledDate().isBefore(LocalDateTime.now())) {
+            throw new Exception("Update not possible as scheduled date has already passed!!");
+        }
+
+        existing.setName(req.getName());
+        existing.setTitle(req.getTitle());
+        existing.setAvailableDozes(req.getAvailableDozes());
+        existing.setApplicableClasses(req.getApplicableClasses());
+        existing.setScheduledDate(req.getScheduledDate());
+        existing.setLocation(req.getLocation());
+
+        return vaccineDriveRepository.save(existing);
     }
+
 }

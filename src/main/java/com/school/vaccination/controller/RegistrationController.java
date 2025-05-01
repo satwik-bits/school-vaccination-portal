@@ -1,11 +1,11 @@
 package com.school.vaccination.controller;
 
 import com.school.vaccination.enums.FileDownloadType;
+import com.school.vaccination.response.StudentVaccinationResponse;
 import com.school.vaccination.service.RegistrationService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +41,20 @@ public class RegistrationController {
             registrationService.download(FileDownloadType.valueOf(fileDownloadType.toUpperCase()), response);
         } catch (Exception e) {
             throw new Exception("Error in Downloading");
+        }
+    }
+
+    @GetMapping(value = "/display", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> display(
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize
+    ){
+        try{
+            Page<StudentVaccinationResponse> studentVaccinationResponsePage = registrationService.display(pageNo, pageSize);
+            return new ResponseEntity<>(studentVaccinationResponsePage.getContent(), HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 }

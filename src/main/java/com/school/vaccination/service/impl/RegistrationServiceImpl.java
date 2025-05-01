@@ -12,6 +12,9 @@ import com.school.vaccination.service.FileDownloadService;
 import com.school.vaccination.service.RegistrationService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -101,7 +104,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     }
 
-    private static StudentVaccinationResponse getStudentVaccinationResponse(StudentVaccination studentVaccination) {
+    @Override
+    public Page<StudentVaccinationResponse> display(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        List<StudentVaccinationResponse> studentVaccinationResponseList = new ArrayList<>();
+        Page<StudentVaccination> studentVaccinationPage = studentVaccinationRepository.findAll(pageable);
+        Page<StudentVaccinationResponse> responsePage = studentVaccinationPage.map(this::getStudentVaccinationResponse);
+        return responsePage;
+    }
+
+    private StudentVaccinationResponse getStudentVaccinationResponse(StudentVaccination studentVaccination) {
         StudentVaccinationResponse studentVaccinationResponse = new StudentVaccinationResponse();
         studentVaccinationResponse.setVaccineName(studentVaccination.getDrive().getName());
         studentVaccinationResponse.setStudentName(studentVaccination.getStudent().getName());
