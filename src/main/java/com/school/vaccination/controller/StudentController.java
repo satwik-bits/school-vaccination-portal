@@ -50,7 +50,7 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/fetch/{identifier}")
+    @GetMapping("/fetch-by-identifier/{identifier}")
     public ResponseEntity<Object> getStudentByIdentifier(
             @PathVariable String identifier,
             @RequestParam(defaultValue = "0") int pageNo,
@@ -58,13 +58,13 @@ public class StudentController {
     ) {
         try {
             Page<Student> students = studentService.fetchStudentDetailsByIdentifier(identifier, pageNo, pageSize);
-            return new ResponseEntity<>(students, HttpStatus.OK);
+            return new ResponseEntity<>(students.getContent(), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
 
-    @GetMapping("/fetch/{name}")
+    @GetMapping("/fetch-by-name/{name}")
     public ResponseEntity<Object> getStudentByName(
             @PathVariable String name,
             @RequestParam(defaultValue = "0") int pageNo,
@@ -72,13 +72,13 @@ public class StudentController {
     ) {
         try {
             Page<Student> students = studentService.fetchStudentDetailsByName(name, pageNo, pageSize);
-            return new ResponseEntity<>(students, HttpStatus.OK);
+            return new ResponseEntity<>(students.getContent(), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
 
-    @GetMapping("/fetch/{classId}")
+    @GetMapping("/fetch-by-class/{classId}")
     public ResponseEntity<Object> getStudentByName(
             @PathVariable int classId,
             @RequestParam(defaultValue = "0") int pageNo,
@@ -86,13 +86,13 @@ public class StudentController {
     ) {
         try {
             Page<Student> students = studentService.fetchStudentDetailsByClassId(classId, pageNo, pageSize);
-            return new ResponseEntity<>(students, HttpStatus.OK);
+            return new ResponseEntity<>(students.getContent(), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
 
-    @GetMapping("/fetch/{isVaccinated}")
+    @GetMapping("/fetch-isVaccinated/{isVaccinated}")
     public ResponseEntity<Object> getStudentByName(
             @PathVariable boolean isVaccinated,
             @RequestParam(defaultValue = "0") int pageNo,
@@ -100,7 +100,7 @@ public class StudentController {
     ) {
         try {
             Page<Student> students = studentService.fetchStudentDetailsWhichAreVaccinated(isVaccinated, pageNo, pageSize);
-            return new ResponseEntity<>(students, HttpStatus.OK);
+            return new ResponseEntity<>(students.getContent(), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e);
         }

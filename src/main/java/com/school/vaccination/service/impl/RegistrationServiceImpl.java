@@ -107,10 +107,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public Page<StudentVaccinationResponse> display(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        List<StudentVaccinationResponse> studentVaccinationResponseList = new ArrayList<>();
         Page<StudentVaccination> studentVaccinationPage = studentVaccinationRepository.findAll(pageable);
-        Page<StudentVaccinationResponse> responsePage = studentVaccinationPage.map(this::getStudentVaccinationResponse);
-        return responsePage;
+        return studentVaccinationPage.map(this::getStudentVaccinationResponse);
     }
 
     private StudentVaccinationResponse getStudentVaccinationResponse(StudentVaccination studentVaccination) {
